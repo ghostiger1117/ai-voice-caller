@@ -6,6 +6,8 @@ yarn-error.log*
 
 # TypeScript
 dist/
+public/audio/
+public/audio/**/*
 *.tsbuildinfo
 
 # Logs
