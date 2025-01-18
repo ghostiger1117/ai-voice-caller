@@ -1,0 +1,39 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# TypeScript
+dist/
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+logs/**/*.log
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# MacOS
+.DS_Store
+
+# Miscellaneous
+*.tmp
+*.temp
+*.bak
+
+# Dependency directories
+node_modules/
+
+# Generated files
+coverage/
