@@ -80,7 +80,7 @@ router.post('/', async (req: Request, res: Response) => {
     const audioUrl = `${req.protocol}://${req.get('host')}/audio/${audioFilename}`;
 
     // Initiate the Twilio call
-    const callSid = await createOutboundCall(to, audioUrl);
+    const callSid = await createOutboundCall(to);
     logger.info({ callSid }, 'Outbound call initiated successfully');
 
     res.status(200).json({

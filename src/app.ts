@@ -13,15 +13,7 @@ import callStatusRoutes from './routes/callStatus.routes';
 import mediaRoutes from './routes/media.routes';
 
 // Configure logger
-const logger = pino({
-  transport: {
-    target: 'pino-pretty',
-    options: {
-      colorize: true,
-      translateTime: 'SYS:standard',
-    },
-  },
-});
+import { logger } from './utils/logger';
 
 const app: Application = express();
 
