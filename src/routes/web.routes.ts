@@ -1,14 +1,14 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 import path from 'path';
 
-const router: Router = Router();
+const router = Router();
 
-router.get('/', (req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, '../../public/index.html'));
-});
-
-router.get('/calls', (req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, '../../public/calls.html'));
+// Serve the landing page for all non-API routes
+router.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    return next();
+  }
+  res.sendFile(path.join(__dirname, '../../dist/index.html'));
 });
 
 export default router; 
