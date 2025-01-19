@@ -5,6 +5,13 @@ import { TwilioService } from '../services/twilio.service';
 export const initiateCall = async (req: Request, res: Response) => {
   try {
     const { to, message } = req.body;
+    if (!message) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Message is required'
+      });
+    }
+    
     const twilioService = new TwilioService();
     const call = await twilioService.makeCall(to, message);
     

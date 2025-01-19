@@ -1,6 +1,6 @@
 {
   "name": "@atrix.dev/ai-voice-sdk",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "AI Voice Caller SDK - Create AI-powered voice calls with ease",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

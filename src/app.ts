@@ -10,7 +10,7 @@ import 'dotenv/config';
 const app = express();
 
 // Middleware
-setupMiddleware(app);
+setupMiddleware(app); 
 app.use(cors());
 
 // Static files

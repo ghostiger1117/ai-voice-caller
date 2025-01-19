@@ -18,6 +18,8 @@ import { ConversationManager } from './services/conversation';
 import { validateConfig, validateCallOptions } from './utils/validation';
 import { AIVoiceError, ErrorCodes } from './utils/errors';
 import { formatPhoneNumber } from './utils/phone';
+import { TTSManager, TTSService } from './tts/index';
+import {  TTSOptions } from './services/tts/base';
 
 export class AIVoiceCaller {
   private config: AIVoiceConfig;
@@ -30,6 +32,7 @@ export class AIVoiceCaller {
   private logger: LoggerService;
   private analytics: AnalyticsService;
   private conversations: ConversationManager;
+  private tts: TTSService;
 
   constructor(config: AIVoiceConfig) {
     validateConfig(config);
@@ -56,6 +59,21 @@ export class AIVoiceCaller {
 
     // Setup websocket connection
     this.websocket.connect();
+
+    this.tts = new TTSService({
+      providers: [
+        {
+          name: 'elevenlabs',
+          enabled: true,
+          priority: 1,
+          config: {
+            apiKey: config.elevenLabsApiKey,
+            voiceId: config.elevenLabsVoiceId
+          }
+        }
+      ],
+      logLevel: config.logLevel
+    });
   }
 
   async makeCall(options: CallOptions): Promise<CallResponse> {
@@ -283,7 +301,12 @@ export class AIVoiceCaller {
     const aiCost = duration * 0.01;    // $0.01 per second for AI processing
     return voiceCost + aiCost;
   }
+
+  async generateSpeech(text: string, options?: TTSOptions): Promise<Buffer> {
+    return this.tts.generateSpeech(text, options);
+  }
 }
 
 export * from './types';
-export * from './utils/errors'; 
+export * from './utils/errors';
+export * from './services/tts/base'; 

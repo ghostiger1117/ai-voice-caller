@@ -82,4 +82,18 @@ export interface AnalyticsData {
   to: string;
   cost?: number;
   type: 'voice' | 'sms';
+}
+
+export interface TTSConfig {
+  providers: {
+    name: string;
+    enabled: boolean;
+    priority?: number;
+    config?: {
+      apiKey?: string;
+      voiceId?: string;
+      model?: string;
+    };
+  }[];
+  logLevel?: 'debug' | 'info' | 'warn' | 'error';
 } 

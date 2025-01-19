@@ -14,7 +14,7 @@ export const handleIncomingCall = async (req: Request, res: Response) => {
     );
     
     const twiml = new TwilioService().generateTwiML();
-    twiml.play(welcomeAudio);
+    twiml.play(welcomeAudio.toString());
     twiml.record({
       action: '/api/media/process',
       maxLength: 30,
