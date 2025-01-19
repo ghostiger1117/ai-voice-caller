@@ -1,0 +1,15 @@
+{
+  "name": "ai-voice-sdk-example",
+  "version": "1.0.0",
+  "dependencies": {
+    "@atrix.dev/ai-voice-sdk": "^1.0.1",
+    "dotenv": "^16.4.1"
+  },
+  "scripts": {
+    "start": "ts-node index.ts"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+} 

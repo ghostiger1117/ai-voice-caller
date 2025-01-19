@@ -4,28 +4,44 @@ import { OpenAIService } from '../services/openai.service';
 import { ElevenLabsService } from '../services/elevenlabs.service';
 import { AudioProcessor } from '../services/audio.service';
 import { TwilioService } from '../services/twilio.service';
+import { EmotionService } from '../services/emotion.service';
+import { AnalyticsService } from '../services/analytics.service';
 
 export const processAudio = async (req: Request, res: Response) => {
+  const startTime = Date.now();
   try {
     const { RecordingUrl, CallSid } = req.body;
     const audioProcessor = new AudioProcessor();
+    const emotionService = new EmotionService();
+    const analyticsService = new AnalyticsService();
     
-    // Download and process audio
+    // Process audio and analyze emotion
     const processedAudio = await audioProcessor.processRecording(RecordingUrl);
+    const emotionResult = await emotionService.analyzeEmotion(processedAudio);
     
-    // Convert speech to text
+    // Generate contextual AI response
     const openai = new OpenAIService();
-    const text = await openai.transcribeAudio(processedAudio);
+    const response = await openai.generateResponse(emotionResult.transcription, {
+      emotion: emotionResult.emotions,
+      sentiment: emotionResult.sentiment
+    });
     
-    // Generate AI response
-    const response = await openai.generateResponse(text);
-    
-    // Convert response to speech
+    // Generate speech with emotion-aware voice
     const elevenlabs = new ElevenLabsService();
-    const audioResponse = await elevenlabs.generateSpeech(response);
+    const audioResponse = await elevenlabs.generateSpeech(response, {
+      emotion: emotionResult.emotions
+    });
+    
+    // Track analytics
+    await analyticsService.trackCall({
+      callSid: CallSid,
+      duration: (Date.now() - startTime) / 1000,
+      sentiment: emotionResult.sentiment,
+      transcription: emotionResult.transcription
+    });
     
     const twiml = new TwilioService().generateTwiML();
-    twiml.play(audioResponse);
+    twiml.play(audioResponse.toString('base64'));
     
     res.type('text/xml');
     res.send(twiml.toString());

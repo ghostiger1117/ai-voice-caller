@@ -1,19 +1,29 @@
 #!/bin/bash
 
-# Get version from package.json
-VERSION=$(node -p "require('./packages/ai-voice-sdk/package.json').version")
+# Get the new version from package.json
+VERSION=$(node -p "require('./package.json').version")
 
-# Create git tag
-git tag -a "v$VERSION" -m "Release v$VERSION"
+# Check if tag exists
+if git rev-parse "v$VERSION" >/dev/null 2>&1; then
+  echo "Version v$VERSION already exists. Please update version in package.json"
+  exit 1
+fi
 
-# Push tag
+# Create and push new tag
+git tag "v$VERSION"
 git push origin "v$VERSION"
 
-# Create GitHub release using gh cli
+# Create GitHub release
 gh release create "v$VERSION" \
-  --title "Release v$VERSION" \
-  --notes "## Changes in this release:
-  
-- Feature: Added support for real-time call status updates
-- Feature: Added multi-language support
-- Bug fixes and improvements" 
+  --title "v$VERSION" \
+  --notes "Release v$VERSION" \
+  --draft=false \
+  --prerelease=false
+
+# Build and publish SDK
+cd packages/ai-voice-sdk
+npm version $VERSION --no-git-tag-version
+npm run build
+npm publish --access public
+
+echo "Released version $VERSION successfully" 

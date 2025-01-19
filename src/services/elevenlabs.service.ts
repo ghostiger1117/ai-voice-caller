@@ -1,15 +1,27 @@
 import axios from 'axios';
 import { env } from '../config/env';
 import { logger } from '../utils/logger';
+import { VoiceSettings } from '../types/voice';
 
 export class ElevenLabsService {
   private baseUrl = 'https://api.elevenlabs.io/v1';
 
-  async generateSpeech(text: string): Promise<string> {
+  async generateSpeech(text: string, options?: { emotion?: any }) {
     try {
+      const voiceSettings: VoiceSettings = {
+        stability: options?.emotion?.neutral ? 0.8 : 0.5,
+        similarityBoost: 0.8,
+        style: 0.7,
+        useSpeakerBoost: true
+      };
+
       const response = await axios.post(
-        `${this.baseUrl}/text-to-speech/${env.ELEVENLABS_VOICE_ID}`,
-        { text },
+        `https://api.elevenlabs.io/v1/text-to-speech/${env.ELEVENLABS_VOICE_ID}`,
+        {
+          text,
+          model_id: 'eleven_monolingual_v1',
+          voice_settings: voiceSettings,
+        },
         {
           headers: {
             'xi-api-key': env.ELEVENLABS_API_KEY,
@@ -19,11 +31,9 @@ export class ElevenLabsService {
         }
       );
 
-      // Save audio file and return URL
-      const audioUrl = await this.saveAudioFile(response.data);
-      return audioUrl;
+      return Buffer.from(response.data);
     } catch (error) {
-      logger.error({ error }, 'ElevenLabs API error');
+      logger.error({ error }, 'Failed to generate speech');
       throw error;
     }
   }
