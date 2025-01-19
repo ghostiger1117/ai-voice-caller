@@ -18,7 +18,7 @@ on:
 
 env:
   NODE_VERSION: '18'
-  CACHE_KEY: npm-deps-${{ hashFiles('**/package-lock.json') }}
+  CACHE_KEY: npm-deps-${{ github.sha }}
 
 jobs:
   validate:
@@ -133,16 +133,3 @@ jobs:
             * Updated SDK version to $VERSION
             * Environment: ${{ github.event.inputs.environment || 'production' }}
             * Commit: ${{ github.sha }}"
-
-  notify:
-    needs: build-and-deploy
-    runs-on: ubuntu-latest
-    if: always()
-    steps:
-      - name: Notify Slack
-        uses: 8398a7/action-slack@v3
-        with:
-          status: ${{ job.status }}
-          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} 
