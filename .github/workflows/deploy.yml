@@ -1,23 +1,52 @@
-name: Deploy Landing Page
+name: Deploy AI Voice Caller
+
+env:
+  NODE_VERSION: '18.x'
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main]
   pull_request:
-    branches: [ main, master ]
+    branches: [main]
   workflow_dispatch:
-
-permissions:
-  contents: write
-  pages: write
-  id-token: write
+    inputs:
+      environment:
+        description: 'Deployment Environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
 
 jobs:
-  deploy:
+  validate:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      
+      - name: Install dependencies
+        run: |
+          npm install
+          npm audit fix --force
+      
+      - name: Type check
+        run: npm run type-check
+      
+      - name: Lint
+        run: npm run lint
+
+  build-and-deploy:
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
     
     steps:
       - uses: actions/checkout@v3
@@ -25,30 +54,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
-          cache: 'npm'
-          
-      - name: Install Dependencies
+          node-version: ${{ env.NODE_VERSION }}
+      
+      - name: Install and build
         run: |
-          npm ci
-          cd packages/ai-voice-sdk && npm ci
-        
-      - name: Build SDK
-        run: cd packages/ai-voice-sdk && npm run build
-        
-      - name: Build Landing Page
-        run: |
-          mkdir -p dist
-          cp -r public/* dist/
-        
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
-        
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
-        with:
-          path: './dist'
-          
+          npm install
+          npm audit fix --force
+          npm run build
+      
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          force_orphan: true
