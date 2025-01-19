@@ -8,7 +8,8 @@
     "build": "tsc",
     "dev": "nodemon --exec ts-node src/app.ts --watch src/**/*.ts",
     "lint": "eslint 'src/**/*.ts' --fix",
-    "webhook": "ngrok http --domain=central-honestly-buffalo.ngrok-free.app 3000"
+    "webhook": "ngrok http --domain=central-honestly-buffalo.ngrok-free.app 3000",
+    "release": "bash scripts/release.sh"
   },
   "keywords": [],
   "author": "",

@@ -14,6 +14,7 @@ import mediaRoutes from './routes/media.routes';
 
 // Configure logger
 import { logger } from './utils/logger';
+import webRoutes from './routes/web.routes';
 
 const app: Application = express();
 
@@ -40,6 +41,8 @@ app.use('/media', mediaRoutes); // Media routes
 app.use('/inbound', inboundRoutes);   // Inbound call handling routes
 app.use('/call-status', callStatusRoutes);
 
+app.use('/', webRoutes);
+app.use(express.static('public'));
 
 // Outbound Call Endpoint
 // app.post('/make-call', async (req: Request, res: Response): Promise<void> => {
