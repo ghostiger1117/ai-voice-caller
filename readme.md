@@ -289,7 +289,7 @@ export const env = cleanEnv(process.env, {
 
 ## Contributing 🤝
 
-This project is maintained by [@moeidsaleem](https://github.com/moeidsaleem). Contributions are welcome!
+This project is maintained by [@ghostiger1117](https://github.com/ghostiger1117). Contributions are welcome!
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
@@ -303,17 +303,17 @@ This project is licensed under the ISC License - see the LICENSE file for detail
 
 ## Acknowledgments 👏
 
-- [@moeidsaleem](https://github.com/moeidsaleem) - Project Creator & Maintainer
+- [@ghostiger1117](https://github.com/ghostiger1117) - Project Creator & Maintainer
 - Twilio - Telephony Services
 - ElevenLabs - Voice Generation
 - OpenAI - Natural Language Processing
 
 ## Contact 📧
 
-Moeid Saleem - [@moeidsaleem](https://github.com/moeidsaleem)
+Moeid Saleem - [@ghostiger1117](https://github.com/ghostiger1117)
 
-Project Link: [https://github.com/moeidsaleem/ai-voice-caller](https://github.com/moeidsaleem/ai-voice-caller)
+Project Link: [https://github.com/ghostiger1117/ai-voice-caller](https://github.com/ghostiger1117/ai-voice-caller)
 
 ---
 
-Made with ❤️ by [@moeidsaleem](https://github.com/moeidsaleem)
+Made with ❤️ by [@ghostiger1117](https://github.com/ghostiger1117)
